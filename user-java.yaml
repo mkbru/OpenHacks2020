@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: userjava
+spec:
+  ports:
+  - port: 8082
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: userjava
+status:
+  loadBalancer: {}
+---
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: userjava
+  name: userjava
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: userjava
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: userjava
+    spec:
+      containers:
+      - image: registryazp5242.azurecr.io/user-java:1
+        name: trips
+        env:
+        - name: SQL_USER
+          value: sqladminaZp5242
+        - name: SQL_PASSWORD
+          value: tU6zf5Hc1
+        - name: SQL_SERVER	
+          value: sqlserverazp5242.database.windows.net
+        - name: SQL_DBNAME
+          value: mydrivingDB
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}

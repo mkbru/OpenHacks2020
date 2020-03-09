@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  name: trips
+spec:
+  ports:
+  - port: 8081
+    protocol: TCP
+    targetPort: 80
+  selector:
+    run: trips
+status:
+  loadBalancer: {}
+---
+---
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    run: trips
+  name: trips
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      run: trips
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        run: trips
+    spec:
+      containers:
+      - image: registryazp5242.azurecr.io/trips:1
+        name: trips
+        env:
+        - name: SQL_USER
+          value: sqladminaZp5242
+        - name: SQL_PASSWORD
+          value: tU6zf5Hc1
+        - name: SQL_SERVER	
+          value: sqlserverazp5242.database.windows.net
+        - name: SQL_DBNAME
+          value: mydrivingDB
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
