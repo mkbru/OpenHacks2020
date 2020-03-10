@@ -36,16 +36,27 @@ spec:
       containers:
       - image: registryazp5242.azurecr.io/user-java:1
         name: trips
-        env:
-        - name: SQL_USER
-          value: sqladminaZp5242
-        - name: SQL_PASSWORD
-          value: tU6zf5Hc1
-        - name: SQL_SERVER	
-          value: sqlserverazp5242.database.windows.net
-        - name: SQL_DBNAME
-          value: mydrivingDB
         ports:
         - containerPort: 80
         resources: {}
+        volumeMounts:
+        - name: kv
+          mountPath: /secrets
+          readOnly: true
+      volumes:
+      - name: kv
+        flexVolume:
+          driver: "azure/kv"
+          secretRef:
+            name: kvcreds
+          options:
+            usepodidentity: "false"
+            keyvaultname: "kv-trip-insights"
+            keyvaultobjectnames: "SQLUSER;SQLPASSWORD;SQLSERVER;SQLDBNAME"
+            keyvaultobjecttypes: "secret;secret;secret;secret"
+            keyvaultobjectaliases: "SQL_USER;SQL_PASSWORD;SQL_SERVER;SQL_DBNAME"
+            keyvaultobjectversions: "1.0"
+            resourcegroup: "teamResources"
+            subscriptionid: "49c2e1e8-68e1-4027-bfc6-41a0e54dc153"
+            tenantid: "5a90cf0b-183a-4130-a49a-7f43ed0b3347"
 status: {}
