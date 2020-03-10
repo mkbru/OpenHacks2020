@@ -41,7 +41,7 @@ spec:
         resources: {}
         volumeMounts:
         - name: kv
-          mountPath: /kvmnt
+          mountPath: /secrets
           readOnly: true
       volumes:
       - name: kv
